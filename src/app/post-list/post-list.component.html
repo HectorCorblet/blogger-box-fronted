@@ -1,0 +1,9 @@
+<div *ngIf="posts && posts.length">
+    <div *ngFor="let post of posts">
+        <app-post-list-item [post]="post"></app-post-list-item>
+    </div>
+</div>
+
+<div *ngIf="!posts || posts.length===0">
+    <p>No post available.</p>
+</div>
