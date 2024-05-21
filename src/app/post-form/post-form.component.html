@@ -1,0 +1,47 @@
+<div class="container py-3">
+    <main class="form-signin w-100 m-auto">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="form-group mb-3">
+                <label for="title">Title</label>
+                <input id="title" formControlName="title" class="form-control"
+                    [class.is-invalid]="title.invalid && title.touched"
+                    [class.is-valid]="title.valid && title.touched" />
+                <div *ngIf="title.invalid && (title.dirty || title.touched)" class="invalid-feedback text-danger">
+                    <div *ngIf="title.errors?.['required']">Title is required.</div>
+                    <div *ngIf="title.errors?.['minlength']">Title must be at least 5 characters long.</div>
+                    <div *ngIf="title.errors?.['maxlength']">Title cannot be more than 150 characters long.</div>
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="listCategories">Category</label>
+                <select id="listCategories" formControlName="listCategories" class="form-control"
+                    [class.is-invalid]="listCategories.invalid && listCategories.touched"
+                    [class.is-valid]="listCategories.valid && listCategories.touched">
+                    <option value="" disabled selected>Select a category</option>
+                    <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+                </select>
+                <div *ngIf="listCategories.invalid && (listCategories.dirty || listCategories.touched)"
+                    class="invalid-feedback text-danger">
+                    <div *ngIf="listCategories.errors?.['required']">Category is required.</div>
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="content">Content</label>
+                <textarea id="content" formControlName="content" class="form-control"
+                    [class.is-invalid]="content.invalid && content.touched"
+                    [class.is-valid]="content.valid && content.touched"></textarea>
+                <div *ngIf="content.invalid && (content.dirty || content.touched)" class="invalid-feedback text-danger">
+                    <div *ngIf="content.errors?.['required']">Content is required.</div>
+                    <div *ngIf="content.errors?.['maxlength']">Content cannot be more than 2500 characters long.</div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mb-3">
+                <button type="button" (click)="close()" class="btn btn-danger me-2">Close</button>
+                <button type="submit" [disabled]="form.invalid" class="btn btn-primary"
+                    [ngClass]="{'btn-success': form.valid, 'btn-secondary': form.invalid}">Post Message
+                </button>
+            </div>
+
+        </form>
+    </main>
+</div>

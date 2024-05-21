@@ -1,25 +1,24 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import { Post } from "../data/post";
-import { PostService } from "../services/post.service";
+import { PostService } from '../services/post.service';
 
 @Component({
     selector: 'app-post-list',
-    templateUrl: './post-list.component.html',
-    styleUrls: ['./post-list.component.css']
+    templateUrl: 'post-list.component.html'
+
 })
-
 export class PostListComponent implements OnInit {
-    posts: Post[] = [];
+    posts: Post[] = []
 
-    constructor(private postService: PostService) { }
+    constructor(private postService: PostService) {
+    }
 
     ngOnInit(): void {
-        this.loadPosts();
+        this.loadPoast();
     }
 
-    loadPosts(): void {
-        this.postService.getPosts().subscribe(posts => {
-            this.posts = posts;
-        });
+    loadPoast(): void {
+        this.postService.getAll().subscribe((posts) => { this.posts = posts })
     }
+
 }

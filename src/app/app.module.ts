@@ -6,25 +6,26 @@ import { AppComponent } from './app.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PostService } from './services/post.service';
-import { PostListComponent } from './post-list/post-list.component';
-import { PostListItemComponent } from './post-list-item/post-list-item.component';
-
+import { ReactiveFormsModule } from '@angular/forms';
+import { PostModule } from './post.module';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
     AppComponent,
     TopBarComponent,
-    PostListComponent,
-    PostListItemComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-
+    ReactiveFormsModule,
+    PostModule,
     HttpClientModule,
   ],
   providers: [
-    PostService
+    PostService,
+    DatePipe,
+
   ],
   bootstrap: [AppComponent]
 })

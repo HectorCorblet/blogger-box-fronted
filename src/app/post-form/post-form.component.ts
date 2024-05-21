@@ -1,22 +1,19 @@
-import { Component, Input } from '@angular/core';
-import { Post } from '../data/post';
-import { PostCreateInput } from '../data/post';
+import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Category } from '../data/category';
-import { FormBuilder, Validators } from "@angular/forms";
-import { CategoryService } from '../services/category.service';
 import { PostService } from '../services/post.service';
+import { CategoryService } from '../services/category.service';
 import { Router } from "@angular/router";
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
+import { PostCreateInput } from '../data/post';
+import { Location } from '@angular/common';
 
 @Component({
-    selector: 'app-post-list-item',
-    templateUrl: "post-list-item.component.html"
+    selector: 'app-post-form',
+    templateUrl: 'post-form.component.html'
 })
-export class PostItemComponent {
-    isEditing: boolean = false
+export class PostFormComponent {
     categories: Category[] = []
-    @Input()
-    post!: Post
 
     form = this.fb.group({
         title: [
@@ -47,32 +44,6 @@ export class PostItemComponent {
 
     ngOnInit(): void {
         this.loadCategories();
-        this.form.patchValue({
-            title: this.post.title,
-            listCategories: this.post.category.id,
-            content: this.post.content
-        });
-    }
-
-    editing(): void {
-        this.isEditing = true
-    }
-
-    onDelete(): void {
-        this.postService.delete(this.post).subscribe(response => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Post supprimé',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
-
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
-        });
     }
 
     loadCategories(): void {
@@ -80,6 +51,7 @@ export class PostItemComponent {
             this.categories = categories;
         });
     }
+
 
     get title() {
         return this.form.controls['title'];
@@ -93,11 +65,6 @@ export class PostItemComponent {
         return this.form.controls['listCategories'];
     }
 
-    close(): void {
-        this.form.reset();
-        this.isEditing = false;
-    }
-
     onSubmit(): void {
         if (this.form.valid) {
             const newPost: PostCreateInput = {
@@ -105,23 +72,27 @@ export class PostItemComponent {
                 content: this.form.value.content!,
                 categoryId: this.form.value.listCategories!
             };
-            this.postService.update(this.post.id, newPost).subscribe(response => {
+            this.postService.create(newPost).subscribe(response => {
                 console.log('Post created successfully:', response);
                 this.form.reset();
-                this.post = response;
                 Swal.fire({
                     icon: 'success',
-                    title: 'Post mis à jour',
+                    title: 'Post Submitted Successfully',
                     toast: true,
                     position: 'top-end',
                     showConfirmButton: false,
                     timer: 3000
                 });
-                this.isEditing = false;
+                this.router.navigate(['../'])
             }, error => {
                 console.error('Error creating post:', error);
             });
         }
+    }
+
+    close(): void {
+        this.form.reset();
+        this.router.navigate(['../'])
     }
 
 }
